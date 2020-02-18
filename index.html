@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="js/sites.json"></script> -->
+    <script type="text/javascript" src="js/custom.js"></script>
+    
+</head>
+
+<body>
+    <div class="wraper">
+        <div class="table_main">
+            <div class="container-fluid">
+                <h2>Sample Table</h2>
+                <div class="load-btn">
+                    <button class="btn btn-primary load-more"> Load Data</button>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>name</th>
+                                    <th>url</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data_table">
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery.min.js"></script>
+    <script>
+        $(function () {
+            
+            $("body").on('click touchstart', '.load-more', function (e) {
+                ajax_get('js/sites.json', function(data) {
+                    var html = "";
+                    for (var i=0; i < data["sites"].length; i++) {
+                        
+                        html += '<tr><td>' + data["sites"][i]["id"] + '</td><td>' + data["sites"][i]["name"] + '</td><td>' + data["sites"][i]["url"] + '</td></tr>';
+                    }
+                    console.log(html);
+                    document.getElementById("data_table").innerHTML = html;
+                });
+                $("tbody tr").slice(0, 3).show();
+                e.preventDefault();
+                $("tbody tr:hidden").slice(0, 3).slideDown();
+                if ($("tbody tr:hidden").length == 0) {
+                    $(".load-more").css('visibility', 'hidden');
+                }
+                $('html,body').animate({
+                    scrollTop: $(this).offset().top
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+
+</html>
